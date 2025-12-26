@@ -60,6 +60,12 @@
     align-items: center;
 }
 
+.logo img {
+    height: 50px;
+    width: auto;
+    display: block;
+}
+
 .nav-links {
     display: flex;
     gap: var(--spacing-md);
