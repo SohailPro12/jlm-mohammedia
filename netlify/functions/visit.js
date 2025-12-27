@@ -11,10 +11,7 @@ let cachedClient = null;
 let clientPromise = null;
 
 if (!clientPromise) {
-    clientPromise = MongoClient.connect(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+    clientPromise = MongoClient.connect(uri);
 }
 
 exports.handler = async (event, context) => {
