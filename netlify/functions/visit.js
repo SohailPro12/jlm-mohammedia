@@ -1,8 +1,11 @@
 const { MongoClient } = require('mongodb');
 
-// Connection string provided by user
-// NOTE: In production, this should be in an environment variable process.env.MONGODB_URI
-const uri = "mongodb+srv://sohail:qwertyuiop@cluster0.yks7d.mongodb.net/?retryWrites=true&w=majority";
+// Retrieve the URI from environment variables (SECURE)
+const uri = process.env.MONGODB_URI;
+
+if (!uri) {
+    throw new Error('Please define the MONGODB_URI environment variable inside Netlify');
+}
 
 let cachedClient = null;
 let clientPromise = null;
