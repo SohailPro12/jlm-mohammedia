@@ -56,10 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Visit Counter Logic
+    // Visit Counter Logic
     const counterElement = document.getElementById('visit-counter');
     if (counterElement) {
-        const NAMESPACE = 'jlm-enset-mohammedia-site'; 
-        const KEY = 'visits';
         
         // Check if this session has already been counted
         const userSessionKey = 'jlm_session_recorded';
@@ -67,21 +66,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // If visited, just GET the value. If new session, HIT (increment).
         const action = hasVisitedThisSession ? 'get' : 'hit';
-        const url = `https://api.countapi.xyz/${action}/${NAMESPACE}/${KEY}`;
+        
+        // We use the relative path to our Netlify Function
+        const url = `/.netlify/functions/visit?action=${action}`;
         
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                counterElement.innerText = data.value;
-                counterElement.parentElement.style.opacity = '1';
-                
-                // Mark this session as counted so refreshing doesn't increment
-                if (!hasVisitedThisSession) {
-                    sessionStorage.setItem(userSessionKey, 'true');
+                if (data.value !== undefined) {
+                    counterElement.innerText = data.value;
+                    counterElement.parentElement.style.opacity = '1';
+                    
+                    // Mark this session as counted
+                    if (!hasVisitedThisSession) {
+                        sessionStorage.setItem(userSessionKey, 'true');
+                    }
                 }
             })
             .catch(error => {
-                console.error('Error with visit counter:', error);
+                console.error('Error with visit counter API:', error);
                 counterElement.innerText = '--';
             });
     }

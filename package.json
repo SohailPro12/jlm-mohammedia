@@ -1,0 +1,23 @@
+{
+  "name": "jlm-website",
+  "version": "1.0.0",
+  "description": "Bienvenue sur le dépôt du site officiel du Club Jeunes Leaders Marocains (JLM) de l'ENSET Mohammedia.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SohailPro12/jlm-mohammedia.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SohailPro12/jlm-mohammedia/issues"
+  },
+  "homepage": "https://github.com/SohailPro12/jlm-mohammedia#readme",
+  "dependencies": {
+    "mongodb": "^7.0.0"
+  }
+}
