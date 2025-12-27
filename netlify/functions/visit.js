@@ -18,11 +18,7 @@ if (!clientPromise) {
 }
 
 exports.handler = async (event, context) => {
-    // Only allow GET requests (or simple navigation mostly uses GET)
-    // But since we want to 'write' (increment), we might want a POST, 
-    // or just handle it all in one logic for this simple use case.
-    
-    // We'll support a query param ?action=hit or ?action=get
+
     const action = event.queryStringParameters.action || 'hit';
     
     context.callbackWaitsForEmptyEventLoop = false;
