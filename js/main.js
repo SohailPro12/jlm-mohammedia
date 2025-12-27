@@ -58,29 +58,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // Visit Counter Logic
     const counterElement = document.getElementById('visit-counter');
     if (counterElement) {
-        // Using a namespace unique to the site
         const NAMESPACE = 'jlm-enset-mohammedia-site'; 
         const KEY = 'visits';
         
-        // Check if we already counted this session/user to avoid spamming hits on refresh (optional but good practice)
-        // However, user asked "how many people entered", usually implies hits. 
-        // We will just hit every time for simplicity as "page views", or use localStorage to limit.
-        // Let's do a simple hit for every page text "entered".
+        // Check if this session has already been counted
+        const userSessionKey = 'jlm_session_recorded';
+        const hasVisitedThisSession = sessionStorage.getItem(userSessionKey);
+
+        // If visited, just GET the value. If new session, HIT (increment).
+        const action = hasVisitedThisSession ? 'get' : 'hit';
+        const url = `https://api.countapi.xyz/${action}/${NAMESPACE}/${KEY}`;
         
-        fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/${KEY}`)
+        fetch(url)
             .then(response => response.json())
             .then(data => {
                 counterElement.innerText = data.value;
-                counterElement.parentElement.style.opacity = '1'; // Fade in
+                counterElement.parentElement.style.opacity = '1';
+                
+                // Mark this session as counted so refreshing doesn't increment
+                if (!hasVisitedThisSession) {
+                    sessionStorage.setItem(userSessionKey, 'true');
+                }
             })
             .catch(error => {
                 console.error('Error with visit counter:', error);
-                // Fallback to a localized simulated counter or just hide
-                // For now, let's just show a default or localStorage fallback
-                let localCount = localStorage.getItem('local_visit_count') || 0;
-                localCount++;
-                localStorage.setItem('local_visit_count', localCount);
-                counterElement.innerText = localCount + " (local)";
+                counterElement.innerText = '--';
             });
     }
 });
