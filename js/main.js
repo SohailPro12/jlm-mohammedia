@@ -43,23 +43,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (videoId) {
                 if (platform === 'google-drive') {
-                    // Try direct HTML5 video for smoother playback (bypassing Google's preview iframe issues)
-                    const video = document.createElement('video');
-                    video.setAttribute('controls', '');
-                    video.setAttribute('autoplay', '');
-                    video.style.width = '100%';
-                    video.style.height = '100%';
-                    video.style.objectFit = 'contain'; // or cover
+                    const iframe = document.createElement('iframe');
+                    iframe.setAttribute('src', `https://drive.google.com/file/d/${videoId}/preview`);
+                    iframe.setAttribute('allow', 'autoplay; fullscreen');
+                    iframe.style.width = '100%';
+                    iframe.style.height = '100%';
+                    iframe.style.border = '0';
                     
-                    const source = document.createElement('source');
-                    source.src = `https://drive.google.com/uc?export=download&id=${videoId}`;
-                    source.type = 'video/mp4';
-                    
-                    video.appendChild(source);
-                    
-                    // Clear container and append video
+                    // Clear container and append iframe
                     videoContainer.innerHTML = '';
-                    videoContainer.appendChild(video);
+                    videoContainer.appendChild(iframe);
                     videoContainer.classList.add('playing');
                 } else {
                     // Default to YouTube
