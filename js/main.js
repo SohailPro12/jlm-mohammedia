@@ -42,23 +42,37 @@ document.addEventListener('DOMContentLoaded', () => {
             const platform = videoContainer.getAttribute('data-platform') || 'youtube';
 
             if (videoId) {
-                // Create iframe
-                const iframe = document.createElement('iframe');
-                
                 if (platform === 'google-drive') {
-                    iframe.setAttribute('src', `https://drive.google.com/file/d/${videoId}/preview?autoplay=1`);
+                    // Try direct HTML5 video for smoother playback (bypassing Google's preview iframe issues)
+                    const video = document.createElement('video');
+                    video.setAttribute('controls', '');
+                    video.setAttribute('autoplay', '');
+                    video.style.width = '100%';
+                    video.style.height = '100%';
+                    video.style.objectFit = 'contain'; // or cover
+                    
+                    const source = document.createElement('source');
+                    source.src = `https://drive.google.com/uc?export=download&id=${videoId}`;
+                    source.type = 'video/mp4';
+                    
+                    video.appendChild(source);
+                    
+                    // Clear container and append video
+                    videoContainer.innerHTML = '';
+                    videoContainer.appendChild(video);
+                    videoContainer.classList.add('playing');
                 } else {
                     // Default to YouTube
+                    const iframe = document.createElement('iframe');
                     iframe.setAttribute('src', `https://www.youtube.com/embed/${videoId}?autoplay=1`);
+                    iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+                    iframe.setAttribute('allowfullscreen', '');
+                    
+                    // Clear container and append iframe
+                    videoContainer.innerHTML = '';
+                    videoContainer.appendChild(iframe);
+                    videoContainer.classList.add('playing');
                 }
-
-                iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
-                iframe.setAttribute('allowfullscreen', '');
-                
-                // Clear container and append iframe
-                videoContainer.innerHTML = '';
-                videoContainer.appendChild(iframe);
-                videoContainer.classList.add('playing');
             }
         });
     });
