@@ -39,11 +39,19 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const videoContainer = this.closest('.video-container');
             const videoId = videoContainer.getAttribute('data-video-id');
+            const platform = videoContainer.getAttribute('data-platform') || 'youtube';
 
             if (videoId) {
                 // Create iframe
                 const iframe = document.createElement('iframe');
-                iframe.setAttribute('src', `https://www.youtube.com/embed/${videoId}?autoplay=1`);
+                
+                if (platform === 'google-drive') {
+                    iframe.setAttribute('src', `https://drive.google.com/file/d/${videoId}/preview?autoplay=1`);
+                } else {
+                    // Default to YouTube
+                    iframe.setAttribute('src', `https://www.youtube.com/embed/${videoId}?autoplay=1`);
+                }
+
                 iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
                 iframe.setAttribute('allowfullscreen', '');
                 
